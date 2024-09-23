@@ -6,13 +6,14 @@ ENV NODE_ENV development
 COPY .env.example /starter/.env.example
 COPY . /starter
 
-RUN npm install pm2 -g
-RUN if [ "$NODE_ENV" = "production" ]; then \
-    npm install --omit=dev; \
-    else \
-    npm install; \
-    fi
+# RUN npm install pm2 -g
+# RUN if [ "$NODE_ENV" = "production" ]; then \
+#     npm install --omit=dev; \
+#     else \
+#     npm install; \
+#     fi
+RUN npm install
 
-CMD ["pm2-runtime","app.js"]
+CMD ["npm","start"]
 
 EXPOSE 8080
