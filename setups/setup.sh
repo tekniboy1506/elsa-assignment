@@ -10,15 +10,16 @@ detect_architecture() {
         
     elif [[ "$ARCH" == "aarch64" ]]; then
         echo "Detected architecture: arm64"
-        KUBECTL_BIN= curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
+        KUBECTL_BIN="https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl"
         MINIKUBE_BIN="minikube-linux-arm64"
     else
         echo "Unsupported architecture: $ARCH"
         exit 1
     fi
-    }
+}
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if [[ -f /etc/lsb-release || -f /etc/debian_version ]]; then  # Fixed syntax for the OR condition
+    if [[ -f /etc/lsb-release || -f /etc/debian_version ]]; then
         echo "Installing Nodejs 20..."
         curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
         sudo apt-get install -y nodejs
@@ -57,19 +58,24 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo install $MINIKUBE_BIN /usr/local/bin/minikube
         rm $MINIKUBE_BIN
 
+        echo "Starting Minikube..."
+        sudo useradd -m -d /home/elsa -s /bin/bash elsa && usermod -aG docker elsa
+        sudo su elsa
+        minikube start
+        minikube addons enable ingress
+        kubectl create namespace docker-repo
+        
+        echo "Installing Local Docker Registry..."
+        kubectl config set-context --current --namespace docker-repo
+        kubectl apply -f setups/docker-registry/docker-registry.yml
+
+
         echo "Installing Terraform..."
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update && sudo apt install terraform
-
-
-        else
-            echo "Unsupported architecture: $ARCH"
-            exit 1
-        fi
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install terraform
 
     elif [ -f /etc/redhat-release ]; then
-
         echo "Installing Nodejs 20..."
         curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
         sudo yum install -y nodejs
@@ -100,7 +106,6 @@ sudo apt update && sudo apt install terraform
         sudo yum install -y yum-utils
         sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
         sudo yum -y install terraform
-
     fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then 
     # Check if Brew is available
@@ -119,8 +124,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     echo "Installing kubectl & minikube..."
     detect_architecture
-    curl -LO kubectl
-    sudo install $KUBECTL_BIN /usr/local/bin
+    curl -LO $KUBECTL_BIN
+    sudo install kubectl /usr/local/bin
     rm kubectl
     brew install minikube
 
@@ -132,6 +137,6 @@ else
     exit 1
 fi
 
-# Start Jenkins
-echo "Starting Jenkins..."
-cd setups/jenkins && docker compose up -d
+# # Start Jenkins
+# echo "Starting Jenkins..."
+# cd setups/jenkins && docker compose up -d
