@@ -130,3 +130,7 @@ else
     echo "OS not supported"
     exit 1
 fi
+
+# Start Jenkins
+echo "Starting Jenkins..."
+cd setups/jenkins && docker compose up -d
