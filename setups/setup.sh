@@ -21,7 +21,7 @@ detect_architecture() {
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     if [[ -f /etc/lsb-release || -f /etc/debian_version ]]; then
         echo "Installing neccesary packages..."
-        apt update -y && apt install git gettext
+        sudo apt update -y && apt install git gettext
 
         echo "Installing Nodejs 20..."
         curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
@@ -80,7 +80,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
     elif [ -f /etc/redhat-release ]; then
         echo "Installing neccesary packages..."
-        apt update -y && apt install git gettext
+        sudo ymp install git gettext
 
         echo "Installing Nodejs 20..."
         curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
