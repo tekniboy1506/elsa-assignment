@@ -51,9 +51,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Installing kubectl & minikube..."
         detect_architecture
         curl -LO $KUBECTL_BIN
-        sudo install $KUBECTL_BIN /usr/local/bin
-        rm $KUBECTL_BIN
-        curl -LO https://storage.googleapis.com/minikube/releases/latest/$MINIKUBE_BI
+        sudo install kubectl /usr/local/bin
+        rm kubectl
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/$MINIKUBE_BIN
         sudo install $MINIKUBE_BIN /usr/local/bin/minikube
         rm $MINIKUBE_BIN
 
@@ -90,8 +90,8 @@ sudo apt update && sudo apt install terraform
         echo "Installing kubectl & minikube..."
         detect_architecture
         curl -LO $KUBECTL_BIN
-        sudo install $KUBECTL_BIN /usr/local/bin
-        rm $KUBECTL_BIN
+        sudo install kubectl /usr/local/bin
+        rm kubectl
         curl -LO https://storage.googleapis.com/minikube/releases/latest/$MINIKUBE_BIN
         sudo install $MINIKUBE_BIN /usr/local/bin/minikube
         rm $MINIKUBE_BIN
@@ -119,9 +119,9 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 
     echo "Installing kubectl & minikube..."
     detect_architecture
-    curl -LO $KUBECTL_BIN
+    curl -LO kubectl
     sudo install $KUBECTL_BIN /usr/local/bin
-    rm $KUBECTL_BIN
+    rm kubectl
     brew install minikube
 
     echo "Installing Terraform..."
