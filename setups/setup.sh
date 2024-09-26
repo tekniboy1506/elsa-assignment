@@ -62,7 +62,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         rm $MINIKUBE_BIN
 
         echo "Starting Minikube..."
-        sudo useradd -m -d /home/elsa -s /bin/bash elsa && usermod -aG docker elsa
+        sudo useradd -m -d /home/elsa -s /bin/bash elsa && sudo usermod -aG docker elsa
         sudo su elsa
         minikube start
         minikube addons enable ingress
