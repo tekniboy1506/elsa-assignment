@@ -7,5 +7,4 @@ echo "Installing Local Docker Registry..."
 kubectl config set-context --current --namespace docker-repo
 kubectl apply -f setups/docker-registry/docker-registry.yml
 kubectl wait --for=condition=Ready pod/local-registry
-echo NODEPORT=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
-echo REGISTRY_URL=$(minikube ip):$NODEPORT >> .env
+echo REGISTRY_URL=$(minikube ip):=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
