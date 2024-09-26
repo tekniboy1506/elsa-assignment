@@ -69,6 +69,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Starting Minikube..."
         sudo useradd -u -m -d /home/elsa -s /bin/bash elsacat 
         sudo usermod -aG docker elsa
+        sudo chown -R elsa:elsa $(pwd)
         sudo su elsa
         minikube start
         minikube addons enable ingress
@@ -106,6 +107,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Docker version:"
         docker --version
 
+        # Allowing interacting with http Docker repo
         sudo cp setups/docker-registry/daemon.json /etc/docker/
         sudo systemctl restart docker
 
@@ -119,7 +121,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         rm $MINIKUBE_BIN
 
         echo "Starting Minikube..."
-        sudo useradd -m -d /home/elsa -s /bin/bash elsa && usermod -aG docker elsa
+        sudo useradd -u -m -d /home/elsa -s /bin/bash elsa
+
+        sudo usermod -aG docker elsa
         sudo su elsa
         minikube start
         minikube addons enable ingress
@@ -128,6 +132,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Installing Local Docker Registry..."
         kubectl config set-context --current --namespace docker-repo
         kubectl apply -f setups/docker-registry/docker-registry.yml
+
+        echo NODEPORT=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
+        echo REGISTRY_URL=$(minikube ip):$NODEPORT >> .env
 
         echo "Installing Terraform..."
         sudo yum install -y yum-utils
