@@ -20,6 +20,9 @@ detect_architecture() {
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     if [[ -f /etc/lsb-release || -f /etc/debian_version ]]; then
+        echo "Installing neccesary packages..."
+        apt update -y && apt install git gettext
+
         echo "Installing Nodejs 20..."
         curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
         sudo apt-get install -y nodejs
@@ -76,6 +79,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo apt update && sudo apt install terraform
 
     elif [ -f /etc/redhat-release ]; then
+        echo "Installing neccesary packages..."
+        apt update -y && apt install git gettext
+
         echo "Installing Nodejs 20..."
         curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
         sudo yum install -y nodejs
@@ -101,6 +107,17 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         curl -LO https://storage.googleapis.com/minikube/releases/latest/$MINIKUBE_BIN
         sudo install $MINIKUBE_BIN /usr/local/bin/minikube
         rm $MINIKUBE_BIN
+
+        echo "Starting Minikube..."
+        sudo useradd -m -d /home/elsa -s /bin/bash elsa && usermod -aG docker elsa
+        sudo su elsa
+        minikube start
+        minikube addons enable ingress
+        kubectl create namespace docker-repo
+        
+        echo "Installing Local Docker Registry..."
+        kubectl config set-context --current --namespace docker-repo
+        kubectl apply -f setups/docker-registry/docker-registry.yml
 
         echo "Installing Terraform..."
         sudo yum install -y yum-utils
