@@ -65,7 +65,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         rm $MINIKUBE_BIN
 
         echo "Starting Minikube..."
-        sudo su -u $USER ./setups/minikube.sh
+        sudo su $USER -c ./setups/minikube_init.sh
 
         echo "Installing Terraform..."
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
