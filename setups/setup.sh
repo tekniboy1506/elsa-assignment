@@ -48,9 +48,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Install Docker Engine
         sudo apt update -y
         sudo apt install -y docker-ce
+        sudo systemctl enable docker
 
         echo "Docker version:"
         docker --version
+
+        # Allowing interacting with http Docker repo
+        sudo cp setups/docker-registry/daemon.json /etc/docker/
+        sudo systemctl restart docker
 
         echo "Installing kubectl & minikube..."
         detect_architecture
@@ -62,7 +67,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         rm $MINIKUBE_BIN
 
         echo "Starting Minikube..."
-        sudo useradd -m -d /home/elsa -s /bin/bash elsa && sudo usermod -aG docker elsa
+        sudo useradd -u -m -d /home/elsa -s /bin/bash elsacat 
+        sudo usermod -aG docker elsa
         sudo su elsa
         minikube start
         minikube addons enable ingress
@@ -71,6 +77,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo "Installing Local Docker Registry..."
         kubectl config set-context --current --namespace docker-repo
         kubectl apply -f setups/docker-registry/docker-registry.yml
+
+
 
 
         echo "Installing Terraform..."
@@ -94,10 +102,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo yum install -y docker-ce docker-ce-cli containerd.io
         sudo systemctl start docker
         sudo systemctl enable docker
-        sudo usermod -aG docker "$(whoami)"
 
         echo "Docker version:"
         docker --version
+
+        sudo cp setups/docker-registry/daemon.json /etc/docker/
+        sudo systemctl restart docker
 
         echo "Installing kubectl & minikube..."
         detect_architecture
