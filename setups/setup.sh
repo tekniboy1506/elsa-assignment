@@ -65,18 +65,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         rm $MINIKUBE_BIN
 
         echo "Starting Minikube..."
-        sudo su -u $USER <<EOF 
-            minikube addons enable ingress
-            kubectl create namespace docker-repo
-        
-            echo "Installing Local Docker Registry..."
-            kubectl config set-context --current --namespace docker-repo
-            kubectl apply -f setups/docker-registry/docker-registry.yml
-            echo NODEPORT=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
-            echo REGISTRY_URL=$(minikube ip):$NODEPORT >> .env
-        EOF
-
-
+        sudo su -u $USER ./setups/minikube.sh
 
         echo "Installing Terraform..."
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
