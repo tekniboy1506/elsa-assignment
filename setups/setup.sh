@@ -66,14 +66,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
         echo "Starting Minikube..."
         sudo su -u $USER <<EOF 
-        minikube addons enable ingress
-        kubectl create namespace docker-repo
+            minikube addons enable ingress
+            kubectl create namespace docker-repo
         
-        echo "Installing Local Docker Registry..."
-        kubectl config set-context --current --namespace docker-repo
-        kubectl apply -f setups/docker-registry/docker-registry.yml
-        echo NODEPORT=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
-        echo REGISTRY_URL=$(minikube ip):$NODEPORT >> .env
+            echo "Installing Local Docker Registry..."
+            kubectl config set-context --current --namespace docker-repo
+            kubectl apply -f setups/docker-registry/docker-registry.yml
+            echo NODEPORT=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
+            echo REGISTRY_URL=$(minikube ip):$NODEPORT >> .env
         EOF
 
 
