@@ -49,9 +49,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo apt update -y
         sudo apt install -y docker-ce
         sudo systemctl enable docker
-
-        echo "Docker version:"
-        docker --version
+        sudo usermod -aG docker $USER
 
         # Allowing interacting with http Docker repo
         sudo cp setups/docker-registry/daemon.json /etc/docker/
@@ -67,11 +65,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         rm $MINIKUBE_BIN
 
         echo "Starting Minikube..."
-        sudo useradd -u -m -d /home/elsa -s /bin/bash elsacat 
-        sudo usermod -aG docker elsa
-        sudo chown -R elsa:elsa $(pwd)
-        sudo su elsa
-        minikube start
+        sudo su -u $USER minikube start
         minikube addons enable ingress
         kubectl create namespace docker-repo
         
@@ -122,8 +116,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
         echo "Starting Minikube..."
         sudo useradd -u -m -d /home/elsa -s /bin/bash elsa
-
         sudo usermod -aG docker elsa
+        sudo chown -R elsa:elsa $(pwd)
         sudo su elsa
         minikube start
         minikube addons enable ingress
