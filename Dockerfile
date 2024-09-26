@@ -1,17 +1,10 @@
 FROM node:20-slim
 
 WORKDIR /starter
-ENV NODE_ENV development
 
-COPY .env.example /starter/.env.example
+COPY package.json package-lock.json /starter
 COPY . /starter
 
-# RUN npm install pm2 -g
-# RUN if [ "$NODE_ENV" = "production" ]; then \
-#     npm install --omit=dev; \
-#     else \
-#     npm install; \
-#     fi
 RUN npm install
 
 CMD ["npm","start"]

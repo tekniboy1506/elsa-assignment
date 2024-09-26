@@ -5,7 +5,7 @@ metadata:
   labels:
     app: elsa
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: elsa
@@ -16,19 +16,13 @@ spec:
     spec:
       containers:
       - name: elsa
-        image: thanhphan1506/elsa  # You can change the Node.js version and base image here
+        image: ${REGISTRY_URL}/elsa
         ports:
-        - containerPort: 8080   # Your Node.js app's listening port
-        env:
-        - name: NODE_ENV
-          value: "production"   # Environment variable for the Node.js app
-        volumeMounts:
-        - name: app-volume
-          mountPath: /usr/src/app
-        command: ["sh", "-c", "npm install && npm start"]  # You can customize this as per your app's start command
-      volumes:
-      - name: app-volume
-        emptyDir: {}  # Alternatively, you can mount a persistent volume or config map
+        - containerPort: 8080
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
 ---
 apiVersion: v1
 kind: Service

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  BASE_URL: "http://localhost:8080"
+  MONGODB_URI: "mongodb://localhost:27017/test"
+  SITE_CONTACT_EMAIL: "youremail@yourdomain.com"
+  TRANSACTION_EMAIL: "youremail-OR-noreply@yourdomain.com"
+  MAILGUN_USER: "postmaster@sandbox697fcddc09814c6b83718b9fd5d4e5dc.mailgun.org"
+  SMTP_USER: "apikey"
+  SMTP_HOST: "smtp.sendgrid.net"
+  SNAPCHAT_ID: "181f414f-9581-4498-be9a-a223d024cf10"
+  FACEBOOK_ID: "754220301289665"
+  GITHUB_ID: "cb448b1d4f0c743a1e36"
+  GOOGLE_ID: "828110519058.apps.googleusercontent.com"
+  LINKEDIN_ID: "77chexmowru601"
+  TWILIO_SID: "AC6f0edc4c47becc6d0a952536fc9a6025"
+  FOURSQUARE_ID: "2STROLSFBMZLAHG3IBA141EM2HGRF0IRIBB4KXMOGA2EH3JG"
+  PAYPAL_ID: "AdGE8hDyixVoHmbhASqAThfbBcrbcgiJPBwlAM7u7Kfq3YU-iPGc6BXaTppt"
+  PINTEREST_ID: "4819282851912494691"

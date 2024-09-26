@@ -82,6 +82,7 @@ sudo apt update && sudo apt install terraform
         sudo yum install -y docker-ce docker-ce-cli containerd.io
         sudo systemctl start docker
         sudo systemctl enable docker
+        sudo usermod -aG docker "$(whoami)"
 
         echo "Docker version:"
         docker --version
