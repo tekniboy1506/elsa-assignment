@@ -64,13 +64,19 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo install $MINIKUBE_BIN /usr/local/bin/minikube
         rm $MINIKUBE_BIN
 
-        echo "Starting Minikube..."
-        sudo su $USER -c ./setups/minikube_init.sh
-
         echo "Installing Terraform..."
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
         sudo apt update && sudo apt install terraform
+
+        echo "Installing Nginx to expose service publicly..."
+        sudo apt install -y nginx
+        sudo cp setups/nginx/default.conf /etc/nginx/conf.d/ && sudo rm /etc/nginx/site-enabled/*
+        sudo systemctl restart nginx
+
+        echo "Starting Minikube..."
+        sudo su $USER -c ./setups/minikube_init.sh
+
 
     elif [ -f /etc/redhat-release ]; then
         echo "Installing neccesary packages..."
@@ -105,26 +111,19 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         sudo install $MINIKUBE_BIN /usr/local/bin/minikube
         rm $MINIKUBE_BIN
 
-        echo "Starting Minikube..."
-        sudo useradd -u -m -d /home/elsa -s /bin/bash elsa
-        sudo usermod -aG docker elsa
-        sudo chown -R elsa:elsa $(pwd)
-        sudo su elsa
-        minikube start
-        minikube addons enable ingress
-        kubectl create namespace docker-repo
-        
-        echo "Installing Local Docker Registry..."
-        kubectl config set-context --current --namespace docker-repo
-        kubectl apply -f setups/docker-registry/docker-registry.yml
-
-        echo NODEPORT=$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
-        echo REGISTRY_URL=$(minikube ip):$NODEPORT >> .env
-
         echo "Installing Terraform..."
         sudo yum install -y yum-utils
         sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
         sudo yum -y install terraform
+
+        echo "Installing Nginx to expose service publicly..."
+        sudo yum install -y nginx
+        sudo cp setups/nginx/default.conf /etc/nginx/conf.d/ && sudo rm /etc/nginx/site-enabled/*
+        sudo systemctl restart nginx
+
+        echo "Starting Minikube..."
+        sudo su $USER -c ./setups/minikube_init.sh
+
     fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then 
     # Check if Brew is available

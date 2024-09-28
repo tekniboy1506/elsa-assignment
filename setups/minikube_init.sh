@@ -1,13 +1,12 @@
 #!/bin/bash
-minikube start
+
+docker network create --driver=bridge --subnet=192.168.49.0/24 minikube 
+minikube start --network minikube 
 minikube addons enable ingress
-kubectl create namespace docker-repo
 
 echo "Installing Local Docker Registry..."
-kubectl config set-context --current --namespace docker-repo
-kubectl apply -f setups/docker-registry/docker-registry.yml
-kubectl wait --for=condition=Ready pod/local-registry
-echo REGISTRY_URL=$(minikube ip):$(kubectl get svc local-registry-service -o jsonpath='{.spec.ports[0].nodePort}') >> .env
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+echo REGISTRY_URL=192.168.49.1:5000 >> .env
 
 echo "Installing MongoDB into Minikube..."
 kubectl config set-context --current --namespace default

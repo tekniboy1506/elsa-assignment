@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  MONGODB_URI: "mongodb://localhost:27017/test"
+  MONGODB_URI: "mongodb://mongodb:27017/test"
   SITE_CONTACT_EMAIL: "youremail@yourdomain.com"
   TRANSACTION_EMAIL: "youremail-OR-noreply@yourdomain.com"
   MAILGUN_USER: "postmaster@sandbox697fcddc09814c6b83718b9fd5d4e5dc.mailgun.org"
