@@ -4,7 +4,7 @@ docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
 
 docker network create --driver=bridge --subnet=192.168.49.0/24 minikube 
-minikube start --network minikube --insecure-registry="192.168.49.1:5000"
+minikube start --insecure-registry="192.168.49.1:5000"
 minikube addons enable ingress
 
 echo "Installing MongoDB into Minikube..."
