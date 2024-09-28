@@ -2,7 +2,7 @@
 ### Note: 
   - Due to the lack of my JS coding skills, so I'm sorry that I wouldn't be able to achieve the Bonus point on Step 2. Also I wouldn't be able to automate creating the CI/CD pipeline in Jenkins, instead this setup   will only start up the Jenkins and has the Jenkinsfile available in `setups/jenkins` folder for you to set this up.
   - Also I found out that this app builds the frontend and the backend together which I don't think they can be separated into 2 separate apps, so I'll only adjust the app's Dockerfile to be more appropriate.
-  - This setup has been tested on Ubuntu > 20.04 lts and CentOS 9, there is also a possibility to set this up on MacOS but it may require some manual adjustments.
+  - This setup has been tested on `Ubuntu` > `20.04` lts and `CentOS 9`, there is also a possibility to set this up on `MacOS` but it may require some manual adjustments.
 
 ## Contents:
 ###  Init setup: 
