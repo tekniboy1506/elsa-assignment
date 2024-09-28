@@ -1,0 +1,40 @@
+#!/usr/bin/env groovy
+pipeline {
+    agent any
+    stages {
+        stage('Test') {
+            steps {
+                script {
+                    checkout([$class: 'GitSCM', branches: [[name: branch]], extensions: [], userRemoteConfigs: [[credentialsId: 'git', url: 'https://github.com/tekniboy1506/elsa-assignment']]])
+                    sh '''
+                    npm install
+                    npm lint
+                    npm test
+                    '''
+                }
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                script {
+                    sh '''
+                    echo "Building and Pushing Docker image for the App..."
+                    ./setups/build.sh
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    sh '''
+                    echo "Deploying new version to Minikube..."
+                    ./setups/deploy.sh
+                    '''
+                }
+            }
+        }
+
+    }
+}

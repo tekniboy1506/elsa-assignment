@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: elsa
-        image: ${REGISTRY_URL}/elsa:$VERSION
+        image: ${REGISTRY_URL}/elsa:$VERSION 
         ports:
         - containerPort: 8080
         envFrom:

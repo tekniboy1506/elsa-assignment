@@ -71,7 +71,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
         echo "Installing Nginx to expose service publicly..."
         sudo apt install -y nginx
-        sudo cp setups/nginx/default.conf /etc/nginx/conf.d/ && sudo rm /etc/nginx/site-enabled/*
+        sudo cp setups/nginx/default.conf /etc/nginx/conf.d/ && sudo rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
         sudo systemctl restart nginx
 
         echo "Starting Minikube..."
@@ -80,7 +80,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
     elif [ -f /etc/redhat-release ]; then
         echo "Installing neccesary packages..."
-        sudo ymp install git gettext
+        sudo yum install git gettext
 
         echo "Installing Nodejs 20..."
         curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
@@ -118,7 +118,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
         echo "Installing Nginx to expose service publicly..."
         sudo yum install -y nginx
-        sudo cp setups/nginx/default.conf /etc/nginx/conf.d/ && sudo rm /etc/nginx/site-enabled/*
+        sudo cp setups/nginx/default.conf /etc/nginx/conf.d/ && sudo rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
         sudo systemctl restart nginx
 
         echo "Starting Minikube..."
