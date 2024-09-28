@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  BASE_URL: "http://localhost:8080"
   MONGODB_URI: "mongodb://localhost:27017/test"
   SITE_CONTACT_EMAIL: "youremail@yourdomain.com"
   TRANSACTION_EMAIL: "youremail-OR-noreply@yourdomain.com"
